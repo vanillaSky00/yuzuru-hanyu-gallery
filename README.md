@@ -5,10 +5,8 @@
   <p>
     A quiet, digital space dedicated to the artistry, grace, and enduring legacy of Yuzuru Hanyu. This fanpage serves as an archive of beautiful moments on and off the ice.
   </p>
-<a href="#" style="display: inline-block; padding: 4px 12px; border: 1px solid #c8bfb0; border-radius: 20px; color: #e8e6e1; font-family: 'DM Mono', monospace; font-size: 0.75rem; text-decoration: none; letter-spacing: 0.1em; background: #111115;">
-  ICE LIQUID GOD
-</a>
 
+![Prototype](https://img.shields.io/badge/Prototype-Liquid_God-black?style=for-the-badge&labelColor=111115)
   <br>
 
   <div>
