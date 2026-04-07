@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><defs>
+    <linearGradient id="icyBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"></stop>
+      <stop offset="40%" stop-color="#e0ffff"></stop>
+      <stop offset="100%" stop-color="#4682b4"></stop>
+    </linearGradient>
+
+    <linearGradient id="deepIce" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00bfff"></stop>
+      <stop offset="100%" stop-color="#000080"></stop>
+    </linearGradient>
+  </defs><circle cx="50" cy="50" r="46" fill="none" stroke="url(#icyBlue)" stroke-width="4" opacity="0.7"></circle><path d="M 25 25 C 40 45, 50 55, 50 75 C 50 55, 60 45, 75 25 C 60 40, 55 50, 55 65 C 55 50, 45 40, 25 25 Z" fill="url(#deepIce)"></path><path d="M 50 5 L 53 22 L 70 25 L 53 28 L 50 45 L 47 28 L 30 25 L 47 22 Z" fill="#ffffff" opacity="0.95"></path></svg>
