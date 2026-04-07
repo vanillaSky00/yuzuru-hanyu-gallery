@@ -9,7 +9,7 @@ images:
   - "assets/images/06-chopin-ballade-no-1-03.jpg"  
 intro: "A performance of control, ache, and impossible elegance."
 size: "tall"
-order: 6
+order: 1
 category: "program"
 tags: ["Olympics", "FS", "Chopin", "Elegance"]
 layout_hint: "video-led"

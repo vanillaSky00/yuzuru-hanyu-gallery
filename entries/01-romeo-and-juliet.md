@@ -10,7 +10,7 @@ images:
   - "assets/images/01-romeo-and-juliet-02.jpg"
 intro: "A young intensity already carrying tragedy and tenderness."
 size: "long"
-order: 1
+order: 6
 category: "program"
 tags: ["Worlds", "FS", "Tragedy", "Youth"]
 layout_hint: "video-led"

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yuzuru Hanyu — Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,400;1,9..144,200;1,9..144,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d0d0f;
+      --bg-card:    #111115;
+      --bg-glass:   rgba(16, 16, 22, 0.72);
+      --text:       #f0f0ee;
+      --text-dim:   #8a8a96;
+      --text-muted: #3e3e4a;
+      --blue:       #5b8cff;
+      --blue-lo:    rgba(91, 140, 255, 0.10);
+      --silver:     #b0b8cc;
+      --silver-lo:  rgba(176, 184, 204, 0.08);
+      --border:     rgba(176, 184, 204, 0.10);
+      --border-hi:  rgba(91, 140, 255, 0.28);
+      --grain-url:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      --sidebar-w:  280px;
+      --topbar-h:   60px;
+      --serif:      'Fraunces', Georgia, serif;
+      --mono:       'DM Mono', 'Courier New', monospace;
+    }
+
+    html { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+    body { min-height: 100vh; overflow-x: hidden; }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--grain-url);
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 1;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Layout shell ──────────────────────────────────────────── */
+    #shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─── SIDEBAR ───────────────────────────────────────────────── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 2.8rem 1.8rem 2rem;
+      border-right: 1px solid var(--border);
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      z-index: 200;
+      transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                  width   0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                  height  0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                  top     0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                  padding 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                  border  0.42s;
+      overflow: hidden;
+    }
+
+    /* ── Collapsed: top nav bar ── */
+    #sidebar.collapsed {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--topbar-h);
+      flex-direction: row;
+      align-items: center;
+      padding: 0 2rem;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Avatar ── */
+    .sb-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-hi);
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      color: var(--silver);
+      transition: width 0.42s, height 0.42s, font-size 0.42s;
+      overflow: hidden;
+      position: relative;
+    }
+    .sb-avatar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(91,140,255,0.18), transparent 65%);
+    }
+    #sidebar.collapsed .sb-avatar {
+      width: 34px;
+      height: 34px;
+      font-size: 0.75rem;
+    }
+
+    /* ── Name block ── */
+    .sb-name-block {
+      margin-top: 1.4rem;
+      transition: margin 0.42s, opacity 0.3s;
+    }
+    #sidebar.collapsed .sb-name-block {
+      margin-top: 0;
+      margin-left: 0.9rem;
+    }
+    .sb-name {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 200;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      line-height: 1.2;
+      white-space: nowrap;
+      transition: font-size 0.42s;
+    }
+    #sidebar.collapsed .sb-name { font-size: 1rem; font-style: normal; }
+
+    .sb-title {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-top: 0.3rem;
+      white-space: nowrap;
+    }
+    #sidebar.collapsed .sb-title { display: none; }
+
+    /* ── Bio ── */
+    .sb-bio {
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: var(--text-dim);
+      margin-top: 1.4rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.2rem;
+      transition: opacity 0.2s, max-height 0.42s;
+      max-height: 200px;
+      overflow: hidden;
+    }
+    #sidebar.collapsed .sb-bio { opacity: 0; max-height: 0; margin: 0; padding: 0; border: none; }
+
+    /* ── Stats ── */
+    .sb-stats {
+      margin-top: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      transition: opacity 0.2s, max-height 0.42s;
+      max-height: 300px;
+      overflow: hidden;
+    }
+    #sidebar.collapsed .sb-stats { opacity: 0; max-height: 0; margin: 0; }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.7rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--text-muted);
+    }
+    .stat-label { color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+    .stat-val   { color: var(--silver); font-weight: 500; }
+
+    /* ── Socials ── */
+    .sb-socials {
+      margin-top: auto;
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      transition: opacity 0.2s, max-height 0.42s;
+      max-height: 80px;
+      overflow: hidden;
+    }
+    #sidebar.collapsed .sb-socials { opacity: 0; max-height: 0; margin: 0; }
+
+    .social-link {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0.3em 0.7em;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-link:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── Collapsed nav links ── */
+    .sb-nav-links {
+      display: none;
+      gap: 1.8rem;
+      margin-left: auto;
+      align-items: center;
+    }
+    #sidebar.collapsed .sb-nav-links { display: flex; }
+
+    .nav-link {
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--blue); }
+
+    /* ─── MAIN CONTENT ──────────────────────────────────────────── */
+    #main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-height: 100vh;
+      transition: margin-left 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.nav-collapsed #main {
+      margin-left: 0;
+      padding-top: var(--topbar-h);
+    }
+
+    /* ─── GALLERY SECTION ───────────────────────────────────────── */
+    #gallery {
+      padding: 2.4rem 2rem 3rem;
+    }
+
+    .gallery-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+    }
+
+    /* Bento grid */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 80px;
+      gap: 10px;
+    }
+
+    /* ── Cards ── */
+    .bcard {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .bcard:hover {
+      border-color: var(--border-hi);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-hi);
+    }
+
+    /* Glassmorphism inner border */
+    .bcard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 60%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Photo fill */
+    .bcard-photo {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s;
+      filter: brightness(0.82) saturate(0.85);
+    }
+    .bcard:hover .bcard-photo {
+      transform: scale(1.04);
+      filter: brightness(0.7) saturate(1);
+    }
+
+    /* Caption overlay */
+    .bcard-caption {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem;
+      background: linear-gradient(to top, rgba(13,13,15,0.88) 0%, rgba(13,13,15,0) 55%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 2;
+    }
+    .bcard:hover .bcard-caption { opacity: 1; }
+
+    .cap-title {
+      font-family: var(--serif);
+      font-size: 0.9rem;
+      font-weight: 200;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .cap-meta {
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-top: 0.25rem;
+    }
+
+    /* Tag corner */
+    .bcard-tag {
+      position: absolute;
+      top: 0.7rem;
+      left: 0.7rem;
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--silver);
+      background: rgba(13,13,15,0.7);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.2em 0.6em;
+      z-index: 3;
+      backdrop-filter: blur(6px);
+    }
+
+    /* ── Grid placement + radii (the asymmetric editorial bento) ── */
+
+    /* Hero — large landscape */
+    .c-hero    { grid-column: 1 / 9;  grid-row: 1 / 5; border-radius: 24px; }
+    /* Tall portrait */
+    .c-tall    { grid-column: 9 / 13; grid-row: 1 / 6; border-radius: 18px 32px 18px 18px; }
+    /* Wide rect */
+    .c-wide-a  { grid-column: 1 / 7;  grid-row: 5 / 8; border-radius: 12px; }
+    /* Square */
+    .c-sq-a    { grid-column: 7 / 10; grid-row: 5 / 8; border-radius: 28px 10px 28px 10px; }
+    /* Small square */
+    .c-sq-b    { grid-column: 10/ 13; grid-row: 6 / 9; border-radius: 8px 8px 24px 8px; }
+    /* Wide rect bottom */
+    .c-wide-b  { grid-column: 1 / 8;  grid-row: 8 / 11; border-radius: 20px 8px 20px 20px; }
+    /* Portrait B */
+    .c-port-b  { grid-column: 8 / 11; grid-row: 8 / 12; border-radius: 10px 10px 24px 10px; }
+    /* Tall C — edge */
+    .c-tall-c  { grid-column: 11/ 13; grid-row: 5 / 10; border-radius: 8px; }
+    /* Wide bottom last */
+    .c-wide-c  { grid-column: 1 / 8;  grid-row: 11/ 14; border-radius: 16px; }
+    /* Square C */
+    .c-sq-c    { grid-column: 8 / 11; grid-row: 12/ 15; border-radius: 24px 8px 8px 24px; }
+    /* Tall D */
+    .c-tall-d  { grid-column: 11/ 13; grid-row: 10/ 15; border-radius: 8px 20px 20px 8px; }
+
+    /* Placeholder photo colors (no external images needed) */
+    .ph-1  { background: linear-gradient(135deg, #0f2044 0%, #1a3a6c 50%, #0d1b35 100%); }
+    .ph-2  { background: linear-gradient(135deg, #141428 0%, #1e1e42 50%, #0d0d20 100%); }
+    .ph-3  { background: linear-gradient(145deg, #0a1a2e 0%, #163354 60%, #0d1826 100%); }
+    .ph-4  { background: linear-gradient(120deg, #1a1128 0%, #2a1a40 50%, #120e1e 100%); }
+    .ph-5  { background: linear-gradient(150deg, #0e2030 0%, #1a3545 60%, #0a1520 100%); }
+    .ph-6  { background: linear-gradient(130deg, #0d1830 0%, #152a50 50%, #0a1228 100%); }
+    .ph-7  { background: linear-gradient(160deg, #101824 0%, #1c2c40 55%, #0c1420 100%); }
+    .ph-8  { background: linear-gradient(125deg, #0e1530 0%, #18264a 50%, #0a1025 100%); }
+    .ph-9  { background: linear-gradient(140deg, #12182a 0%, #1e2a45 55%, #0e1222 100%); }
+    .ph-10 { background: linear-gradient(135deg, #0f1c34 0%, #183060 50%, #0b1428 100%); }
+    .ph-11 { background: linear-gradient(145deg, #131a2e 0%, #1f2d50 55%, #0e1428 100%); }
+
+    /* Shimmer accent on hero */
+    .c-hero .bcard-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(91,140,255,0.10) 0%, transparent 65%);
+    }
+
+    /* ─── FUTURE CONTENT ZONE ───────────────────────────────────── */
+    #future {
+      margin-top: 4rem;
+      position: relative;
+    }
+
+    .future-sep {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border) 20%, var(--border) 80%, transparent);
+      position: relative;
+    }
+    .future-sep::after {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 24px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .future-inner {
+      padding: 6rem 2rem 8rem;
+      text-align: center;
+    }
+
+    .future-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .future-heading {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 200;
+      font-style: italic;
+      color: var(--text-dim);
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+    }
+
+    .future-hint {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-top: 1.2rem;
+    }
+
+    /* decorative dots */
+    .future-dots {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 2.5rem;
+    }
+    .future-dots span {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--border-hi);
+      opacity: 0.4;
+    }
+    .future-dots span:nth-child(2) { opacity: 0.7; background: var(--blue); }
+
+    /* ─── SCROLL TRANSITION ─────────────────────────────────────── */
+    /* handled by JS below */
+
+    /* ─── RESPONSIVE ────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 240px; }
+      .bento { grid-auto-rows: 60px; }
+      .c-hero   { grid-column: 1 / 8; }
+      .c-tall   { grid-column: 8 / 13; }
+    }
+    @media (max-width: 640px) {
+      #sidebar { width: 100%; height: var(--topbar-h); flex-direction: row; align-items: center; padding: 0 1.2rem; border-right: none; border-bottom: 1px solid var(--border); }
+      #sidebar .sb-bio, #sidebar .sb-stats, #sidebar .sb-socials { display: none; }
+      #sidebar .sb-name-block { margin-top: 0; margin-left: 0.8rem; }
+      #sidebar .sb-name { font-size: 0.95rem; font-style: normal; }
+      #sidebar .sb-nav-links { display: flex; }
+      #main { margin-left: 0; padding-top: var(--topbar-h); }
+      .bento { grid-template-columns: 1fr 1fr; grid-auto-rows: 120px; gap: 8px; }
+      .c-hero   { grid-column: 1/3; grid-row: 1/3; border-radius: 16px; }
+      .c-tall   { grid-column: 1/2; grid-row: 3/6; border-radius: 12px; }
+      .c-wide-a { grid-column: 2/3; grid-row: 3/5; border-radius: 12px; }
+      .c-sq-a   { grid-column: 2/3; grid-row: 5/7; border-radius: 16px; }
+      .c-sq-b   { grid-column: 1/2; grid-row: 6/8; border-radius: 12px; }
+      .c-wide-b { grid-column: 1/3; grid-row: 8/10; border-radius: 12px; }
+      .c-port-b { grid-column: 1/2; grid-row: 10/13; border-radius: 12px; }
+      .c-tall-c { grid-column: 2/3; grid-row: 7/10; border-radius: 12px; }
+      .c-wide-c { grid-column: 1/3; grid-row: 13/15; border-radius: 12px; }
+      .c-sq-c   { grid-column: 2/3; grid-row: 10/13; border-radius: 12px; }
+      .c-tall-d { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR / TOPNAV ─────────────────────────────────────── -->
+<aside id="sidebar">
+  <div class="sb-avatar">羽</div>
+
+  <div class="sb-name-block">
+    <div class="sb-name">Yuzuru Hanyu</div>
+    <div class="sb-title">Olympic Champion · Figure Skater</div>
+  </div>
+
+  <p class="sb-bio">
+    Two-time Olympic gold medalist and the first skater to achieve a Grand Prix Final six-peat.
+    His programs are not performances — they are inhabited worlds.
+  </p>
+
+  <div class="sb-stats">
+    <div class="stat-row">
+      <span class="stat-label">Nation</span>
+      <span class="stat-val">Japan</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Olympic Gold</span>
+      <span class="stat-val">2014 · 2018</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">World Record SP</span>
+      <span class="stat-val">111.82</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">World Record FS</span>
+      <span class="stat-val">219.48</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">World Record Total</span>
+      <span class="stat-val">330.43</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Turned Pro</span>
+      <span class="stat-val">2022</span>
+    </div>
+  </div>
+
+  <div class="sb-socials">
+    <a class="social-link" href="#">Gallery</a>
+    <a class="social-link" href="#">Programs</a>
+    <a class="social-link" href="#">Timeline</a>
+    <a class="social-link" href="#">Press</a>
+  </div>
+
+  <!-- shown only when collapsed -->
+  <nav class="sb-nav-links">
+    <a class="nav-link" href="#">Gallery</a>
+    <a class="nav-link" href="#">Programs</a>
+    <a class="nav-link" href="#">Timeline</a>
+    <a class="nav-link" href="#">Press</a>
+  </nav>
+</aside>
+
+<!-- ─── MAIN ────────────────────────────────────────────────── -->
+<main id="main">
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <div class="gallery-label">— Visual Archive</div>
+
+    <div class="bento">
+
+      <!-- Hero -->
+      <div class="bcard c-hero">
+        <div class="bcard-photo ph-1"></div>
+        <div class="bcard-tag">2018 · Pyeongchang</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Seimei — Olympic Gold</div>
+          <div class="cap-meta">Free Skate · 206.17</div>
+        </div>
+      </div>
+
+      <!-- Tall portrait -->
+      <div class="bcard c-tall">
+        <div class="bcard-photo ph-2"></div>
+        <div class="bcard-tag">2015 · NHK</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Seimei — World Record</div>
+          <div class="cap-meta">Free Skate · 216.07</div>
+        </div>
+      </div>
+
+      <!-- Wide A -->
+      <div class="bcard c-wide-a">
+        <div class="bcard-photo ph-3"></div>
+        <div class="bcard-tag">2019 · GPF</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Origin — Darkness</div>
+          <div class="cap-meta">Free Skate · 212.99</div>
+        </div>
+      </div>
+
+      <!-- Square A -->
+      <div class="bcard c-sq-a">
+        <div class="bcard-photo ph-4"></div>
+        <div class="bcard-tag">2019 · GPF</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Otonal</div>
+          <div class="cap-meta">Short Program · 110.53</div>
+        </div>
+      </div>
+
+      <!-- Tall C -->
+      <div class="bcard c-tall-c">
+        <div class="bcard-photo ph-5"></div>
+        <div class="bcard-tag">2020</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Heaven & Earth</div>
+          <div class="cap-meta">Free Skate</div>
+        </div>
+      </div>
+
+      <!-- Square B -->
+      <div class="bcard c-sq-b">
+        <div class="bcard-photo ph-6"></div>
+        <div class="bcard-tag">2017 · Worlds</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Let's Go Crazy</div>
+          <div class="cap-meta">Short Program</div>
+        </div>
+      </div>
+
+      <!-- Wide B -->
+      <div class="bcard c-wide-b">
+        <div class="bcard-photo ph-7"></div>
+        <div class="bcard-tag">2012 · Worlds</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Romeo + Juliet — First Worlds</div>
+          <div class="cap-meta">Free Skate · Historic Performance</div>
+        </div>
+      </div>
+
+      <!-- Portrait B -->
+      <div class="bcard c-port-b">
+        <div class="bcard-photo ph-8"></div>
+        <div class="bcard-tag">2018 · Chopin</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Ballade No. 1</div>
+          <div class="cap-meta">Short Program · Olympic</div>
+        </div>
+      </div>
+
+      <!-- Tall D -->
+      <div class="bcard c-tall-d">
+        <div class="bcard-photo ph-9"></div>
+        <div class="bcard-tag">2017 · Worlds</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Hope & Legacy</div>
+          <div class="cap-meta">Free Skate · 223.20</div>
+        </div>
+      </div>
+
+      <!-- Wide C -->
+      <div class="bcard c-wide-c">
+        <div class="bcard-photo ph-10"></div>
+        <div class="bcard-tag">2021 · Pro</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Let Me Entertain You</div>
+          <div class="cap-meta">Exhibition · Rock Persona</div>
+        </div>
+      </div>
+
+      <!-- Square C -->
+      <div class="bcard c-sq-c">
+        <div class="bcard-photo ph-11"></div>
+        <div class="bcard-tag">2023 · Gala</div>
+        <div class="bcard-caption">
+          <div class="cap-title">Notte Stellata</div>
+          <div class="cap-meta">Tribute · Gala</div>
+        </div>
+      </div>
+
+    </div><!-- /.bento -->
+  </section>
+
+  <!-- Future content zone -->
+  <section id="future">
+    <div class="future-sep"></div>
+    <div class="future-inner">
+      <div class="future-label">— Coming Soon</div>
+      <h2 class="future-heading">More to unfold</h2>
+      <p class="future-hint">Timeline · Press · Contact · Essays</p>
+      <div class="future-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const body    = document.body;
+  let collapsed = false;
+
+  // Threshold: collapse sidebar after scrolling past 80px
+  const THRESHOLD = 80;
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+
+    if (!collapsed && scrollY > THRESHOLD) {
+      collapsed = true;
+      sidebar.classList.add('collapsed');
+      body.classList.add('nav-collapsed');
+    } else if (collapsed && scrollY <= THRESHOLD) {
+      collapsed = false;
+      sidebar.classList.remove('collapsed');
+      body.classList.remove('nav-collapsed');
+    }
+  }, { passive: true });
+
+  // Skip on mobile (handled by CSS directly)
+</script>
+
+</body>
+</html>

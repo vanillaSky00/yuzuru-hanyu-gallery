@@ -1,55 +1,127 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import ProfileLayout from '../layouts/ProfileLayout.astro';
 import GalleryCard from '../components/GalleryCard.jsx';
 
-// Load all entries
 const rawEntries = await Astro.glob('../../entries/*.md');
-
-// Sort by order field
 const entries = rawEntries
   .map(e => e.frontmatter)
   .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
 
-// Convert asset paths (assets/images/foo.jpg → /images/foo.jpg)
 function pub(path) {
   if (!path) return path;
   return path.replace(/^assets\//, '/');
 }
 
 const cards = entries.map(fm => ({
-  ...fm,
-  cover:        pub(fm.cover),
-  previewVideo: pub(fm.previewVideo),
+  title:         fm.title,
+  slug:          fm.slug,
+  year:          fm.year,
+  intro:         fm.intro,
+  tags:          fm.tags || [],
+  cover:         pub(fm.cover),
+  coverPosition: fm.coverPosition,
+  previewVideo:  pub(fm.previewVideo),
   previewPoster: pub(fm.previewPoster),
-  images:       (fm.images || []).map(pub),
 }));
 ---
 
-<Layout title="Yuzuru Hanyu — Visual Diary">
+<ProfileLayout title="Yuzuru Hanyu — Visual Diary">
 
-  <header class="site-header">
-    <h1>Yuzuru Hanyu</h1>
-    <p class="site-subtitle">A Visual Diary</p>
-  </header>
+  <!-- ── Sidebar ── -->
+  <aside id="sidebar">
+    <div class="sb-avatar">羽</div>
 
-  <main>
-    <div class="gallery-grid">
-      {cards.map(card => (
-        <GalleryCard
-          client:visible
-          title={card.title}
-          year={card.year}
-          slug={card.slug}
-          cover={card.cover}
-          coverPosition={card.coverPosition}
-          intro={card.intro}
-          tags={card.tags}
-          size={card.size}
-          previewVideo={card.previewVideo}
-          previewPoster={card.previewPoster}
-        />
-      ))}
+    <div class="sb-name-block">
+      <div class="sb-name">Yuzuru Hanyu</div>
+      <div class="sb-title">Olympic Champion · Figure Skater</div>
     </div>
+
+    <p class="sb-bio">
+      Two-time Olympic gold medalist and the first skater to achieve a Grand Prix Final six-peat.
+      His programs are not performances — they are inhabited worlds.
+    </p>
+
+    <div class="sb-stats">
+      <div class="stat-row">
+        <span class="stat-label">Nation</span>
+        <span class="stat-val">Japan</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Olympic Gold</span>
+        <span class="stat-val">2014 · 2018</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">World Record SP</span>
+        <span class="stat-val">111.82</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">World Record FS</span>
+        <span class="stat-val">219.48</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">World Record Total</span>
+        <span class="stat-val">330.43</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Turned Pro</span>
+        <span class="stat-val">2022</span>
+      </div>
+    </div>
+
+    <div class="sb-socials">
+      <a class="social-link" href="#gallery">Gallery</a>
+      <a class="social-link" href="#future">Programs</a>
+      <a class="social-link" href="#future">Timeline</a>
+      <a class="social-link" href="#future">Press</a>
+    </div>
+
+    <nav class="sb-nav-links">
+      <a class="nav-link" href="#gallery">Gallery</a>
+      <a class="nav-link" href="#future">Programs</a>
+      <a class="nav-link" href="#future">Timeline</a>
+      <a class="nav-link" href="#future">Press</a>
+    </nav>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main id="main">
+
+    <section id="gallery">
+      <div class="gallery-label">— Visual Archive · {cards.length} entries</div>
+
+      <div class="bento">
+        {cards.map((card, i) => (
+          <div class="bcard" data-pos={i}>
+            <GalleryCard
+              client:visible
+              fill={true}
+              title={card.title}
+              year={card.year}
+              slug={card.slug}
+              cover={card.cover}
+              coverPosition={card.coverPosition}
+              intro={card.intro}
+              tags={card.tags}
+              previewVideo={card.previewVideo}
+              previewPoster={card.previewPoster}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="future">
+      <div class="future-sep"></div>
+      <div class="future-inner">
+        <div class="future-label">— Coming Soon</div>
+        <h2 class="future-heading">More to unfold</h2>
+        <p class="future-hint">Timeline · Press · Contact · Essays</p>
+        <div class="future-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-</Layout>
+</ProfileLayout>

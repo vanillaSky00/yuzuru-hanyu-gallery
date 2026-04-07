@@ -15,6 +15,7 @@ export default function GalleryCard({
   title, year, slug, cover, coverPosition,
   intro, tags = [], size = 'medium',
   previewVideo, previewPoster,
+  fill = false,
 }) {
   const [open,    setOpen]    = useState(false);
   const [muted,   setMuted]   = useState(getSessionMuted);
@@ -30,7 +31,10 @@ export default function GalleryCard({
     openT.current = setTimeout(() => {
       if (cardRef.current) {
         const rect = cardRef.current.getBoundingClientRect();
-        setSide(rect.left > window.innerWidth * 0.55 ? 'left' : 'right');
+        const popW = window.innerWidth < 1100 ? 360 : 460;
+        const spaceRight = window.innerWidth - rect.right;
+        const spaceLeft  = rect.left;
+        setSide(spaceRight < popW + 16 && spaceLeft >= popW + 16 ? 'left' : 'right');
       }
       setOpen(true);
     }, OPEN_DELAY);
@@ -115,7 +119,7 @@ const ratio = ratioMap[size] || '4/5';
       tabIndex={0}
       role="article"
       aria-label={`${title}, ${year}`}
-      style={{ aspectRatio: ratio }}
+      style={fill ? { height: '100%' } : { aspectRatio: ratio }}
     >
       {/* Card image */}
       <img
