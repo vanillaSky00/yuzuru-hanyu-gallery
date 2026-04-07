@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const entries = await Astro.glob('../../../entries/*.md');
+  return entries.map(entry => ({
+    params: { slug: entry.frontmatter.slug },
+    props:  { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const fm = entry.frontmatter;
+
+// Asset URL helper: assets/images/foo.jpg → /images/foo.jpg
+function pub(path) {
+  if (!path) return path;
+  return path.replace(/^assets\//, '/');
+}
+
+const cover        = pub(fm.cover);
+const previewVideo = pub(fm.previewVideo);
+const previewPoster = pub(fm.previewPoster) || cover;
+const allImages    = (fm.images || []).map(pub);
+// Body images: skip cover (first image is usually same as cover)
+const bodyImages = allImages.slice(1);
+
+// Navigation: load all sorted entries
+const allEntries = await Astro.glob('../../../entries/*.md');
+const sorted = allEntries.sort((a, b) =>
+  (a.frontmatter.order ?? 99) - (b.frontmatter.order ?? 99)
+);
+const idx      = sorted.findIndex(e => e.frontmatter.slug === fm.slug);
+const prevFm   = idx > 0              ? sorted[idx - 1].frontmatter : null;
+const nextFm   = idx < sorted.length - 1 ? sorted[idx + 1].frontmatter : null;
+
+// Split compiled HTML into sections at <h2> boundaries,
+// then interleave body images using grid composition (MODULE L).
+const fullHtml = await entry.compiledContent();
+const rawSections = fullHtml.split(/(?=<h2[^>]*>)/);
+
+function isLightSection(s) {
+  // Details table and Reflection: render full-width, no image beside
+  return /<h2[^>]*>\s*Details/i.test(s) ||
+         /<h2[^>]*>\s*Reflection/i.test(s) ||
+         s.includes('<table');
+}
+
+let imgIdx = 0;
+const processedSections = rawSections
+  .filter(s => s.trim())
+  .map(s => {
+    const light = isLightSection(s);
+    if (!light && imgIdx < bodyImages.length) {
+      const img    = bodyImages[imgIdx];
+      const layout = imgIdx % 2 === 0 ? 'right' : 'left';
+      imgIdx++;
+      return { html: s, image: img, layout };
+    }
+    return { html: s, image: null, layout: null };
+  });
+---
+
+<Layout title={`${fm.title} — Yuzuru Hanyu`} description={fm.intro}>
+
+  <div class="detail-wrap">
+
+    <!-- ① Back link -->
+    <a href="/" class="back-link">← Gallery</a>
+
+    <!-- ① Title Block -->
+    <div class="entry-title-block">
+      <h1>{fm.title}</h1>
+      <div class="entry-meta">{fm.year} · {fm.category ?? 'program'}</div>
+      {fm.tags && fm.tags.length > 0 && (
+        <div class="entry-tags">
+          {fm.tags.map((t: string) => <span class="tag-chip">{t}</span>)}
+        </div>
+      )}
+      <p class="entry-lede">{fm.intro}</p>
+    </div>
+
+    <!-- ② Lead Media (max 70% width) -->
+    <div class="lead-media">
+      {previewVideo ? (
+        <video
+          src={previewVideo}
+          poster={previewPoster}
+          controls
+          preload="metadata"
+          style="width:100%;border-radius:12px;"
+        />
+      ) : (
+        <img
+          src={cover}
+          alt={fm.title}
+          style={`object-position: ${fm.coverPosition || '50% 35%'}`}
+        />
+      )}
+    </div>
+
+    <!-- ③ Article Body with distributed images -->
+    <article class="article-body">
+      {processedSections.map(sec => (
+        sec.image ? (
+          <div class={`section-with-image layout-${sec.layout}`}>
+            <div class="section-prose" set:html={sec.html} />
+            <figure class="section-image">
+              <img src={sec.image} alt="" loading="lazy" />
+            </figure>
+          </div>
+        ) : (
+          <div class="prose-section" set:html={sec.html} />
+        )
+      ))}
+    </article>
+
+    <!-- ④ Navigation Widget -->
+    <nav class="nav-widget" aria-label="Entry navigation">
+      {prevFm ? (
+        <a href={`/${prevFm.slug}/`} class="nav-prev">
+          <img
+            src={prevFm.cover?.replace(/^assets\//, '/')}
+            alt={prevFm.title}
+            class="nav-thumb"
+          />
+          <div>
+            <div class="nav-label">← Previous</div>
+            <div class="nav-entry-title">{prevFm.title}</div>
+          </div>
+        </a>
+      ) : <span />}
+
+      <a href="/" class="nav-back">↑ All entries</a>
+
+      {nextFm ? (
+        <a href={`/${nextFm.slug}/`} class="nav-next">
+          <div>
+            <div class="nav-label">Next →</div>
+            <div class="nav-entry-title">{nextFm.title}</div>
+          </div>
+          <img
+            src={nextFm.cover?.replace(/^assets\//, '/')}
+            alt={nextFm.title}
+            class="nav-thumb"
+          />
+        </a>
+      ) : <span />}
+    </nav>
+
+  </div>
+
+</Layout>

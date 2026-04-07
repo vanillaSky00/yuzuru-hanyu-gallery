@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GalleryCard from '../components/GalleryCard.jsx';
+
+// Load all entries
+const rawEntries = await Astro.glob('../../entries/*.md');
+
+// Sort by order field
+const entries = rawEntries
+  .map(e => e.frontmatter)
+  .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
+// Convert asset paths (assets/images/foo.jpg → /images/foo.jpg)
+function pub(path) {
+  if (!path) return path;
+  return path.replace(/^assets\//, '/');
+}
+
+const cards = entries.map(fm => ({
+  ...fm,
+  cover:        pub(fm.cover),
+  previewVideo: pub(fm.previewVideo),
+  previewPoster: pub(fm.previewPoster),
+  images:       (fm.images || []).map(pub),
+}));
+---
+
+<Layout title="Yuzuru Hanyu — Visual Diary">
+
+  <header class="site-header">
+    <h1>Yuzuru Hanyu</h1>
+    <p class="site-subtitle">A Visual Diary</p>
+  </header>
+
+  <main>
+    <div class="gallery-grid">
+      {cards.map(card => (
+        <GalleryCard
+          client:visible
+          title={card.title}
+          year={card.year}
+          slug={card.slug}
+          cover={card.cover}
+          coverPosition={card.coverPosition}
+          intro={card.intro}
+          tags={card.tags}
+          size={card.size}
+          previewVideo={card.previewVideo}
+          previewPoster={card.previewPoster}
+        />
+      ))}
+    </div>
+  </main>
+
+</Layout>
