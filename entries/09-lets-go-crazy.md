@@ -8,7 +8,7 @@ images:
   - "assets/images/09-lets-go-crazy-02.jpg"
 intro: "Playful swagger sharpened into something electric."
 size: "cinematic"
-order: 9
+order: 6
 category: "program"
 tags: ["Worlds", "SP", "Prince", "Swagger"]
 layout_hint: "video-led"

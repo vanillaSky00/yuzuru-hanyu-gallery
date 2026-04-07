@@ -9,7 +9,7 @@ images:
   - "assets/images/07-seimei-03.jpg"
 intro: "Ritual, command, and a force that feels larger than the rink."
 size: "tall"
-order: 7
+order: 5
 category: "program"
 tags: ["Mythic", "FS", "Ritual", "Power"]
 layout_hint: "video-led"

@@ -8,7 +8,7 @@ images:
   - "assets/images/05-notte-stellata-gala-tribute-02.jpg"
 intro: "Soft light, remembrance, and a quiet kind of prayer."
 size: "tall"
-order: 5
+order: 7
 category: "gala"
 tags: ["Gala", "Tribute", "Prayerful", "Light"]
 layout_hint: "video-led"

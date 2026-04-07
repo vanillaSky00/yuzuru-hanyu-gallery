@@ -7,8 +7,9 @@ function getSessionMuted() {
   try { return sessionStorage.getItem('hanyu_muted') === 'true'; }
   catch { return false; }
 }
-function setSessionMuted(v) {
+function setGlobalMuted(v) {
   try { sessionStorage.setItem('hanyu_muted', String(v)); } catch {}
+  window.dispatchEvent(new CustomEvent('hanyu-mute-change', { detail: v }));
 }
 
 export default function GalleryCard({
@@ -62,10 +63,9 @@ export default function GalleryCard({
     if (open) {
       v.muted = muted;
       v.play().catch(() => {
-        // Browser blocked unmuted autoplay — fall back to muted
+        // Browser blocked unmuted autoplay — fall back to muted silently
         v.muted = true;
         setMuted(true);
-        setSessionMuted(true);
         v.play().catch(() => {});
       });
     } else {
@@ -77,6 +77,13 @@ export default function GalleryCard({
   useEffect(() => {
     if (videoRef.current) videoRef.current.muted = muted;
   }, [muted]);
+
+  // ── Global mute sync (across all card islands) ───────────────
+  useEffect(() => {
+    const handler = (e) => setMuted(e.detail);
+    window.addEventListener('hanyu-mute-change', handler);
+    return () => window.removeEventListener('hanyu-mute-change', handler);
+  }, []);
 
   useEffect(() => () => { clearTimeout(openT.current); clearTimeout(closeT.current); }, []);
 
@@ -189,7 +196,7 @@ const ratio = ratioMap[size] || '4/5';
                     e.stopPropagation();
                     const next = !muted;
                     setMuted(next);
-                    setSessionMuted(next);
+                    setGlobalMuted(next);
                   }}
                   aria-label={muted ? 'Unmute video' : 'Mute video'}
                 >

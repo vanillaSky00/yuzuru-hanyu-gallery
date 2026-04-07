@@ -2,7 +2,7 @@
 title: "Romeo and Juliet"
 slug: "romeo-and-juliet"
 year: 2012
-cover: "assets/images/01-romeo-and-juliet-01.jpg"
+cover: "assets/images/01-romeo-and-juliet-03.jpg"
 images:
   - "assets/images/01-romeo-and-juliet-01.jpg"
   - "assets/images/01-romeo-and-juliet-03.jpg"
@@ -10,7 +10,7 @@ images:
   - "assets/images/01-romeo-and-juliet-02.jpg"
 intro: "A young intensity already carrying tragedy and tenderness."
 size: "long"
-order: 6
+order: 9
 category: "program"
 tags: ["Worlds", "FS", "Tragedy", "Youth"]
 layout_hint: "video-led"
