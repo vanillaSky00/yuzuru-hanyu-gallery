@@ -3,8 +3,11 @@
   <h1>Yuzuru Hanyu Gallery</h1>
 
   <p>
-    A quiet, digital space dedicated to the artistry, grace, and enduring legacy of Yuzuru Hanyu. This fanpage serves as an archive of beautiful moments on and off the ice.
+    A quiet, digital space dedicated to the artistry, grace, and enduring legacy of Yuzuru Hanyu. <br>
+    This fanpage serves as an archive of beautiful moments on and off the ice.
   </p>
+
+> 🕊️ **Note to Visitors:** This archive is currently a work in progress. As I continue to revise and refine the gallery, you might encounter a few rough edges, or inaccuracies. Please browse with kindness as it takes its final shape!
 
 ![Prototype](https://img.shields.io/badge/Prototype-Liquid_God-black?style=for-the-badge&labelColor=111115)
   <br>
