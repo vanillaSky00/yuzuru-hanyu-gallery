@@ -12,10 +12,13 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const fm = entry.frontmatter;
 
-// Asset URL helper: assets/images/foo.jpg → /images/foo.jpg
+const base = import.meta.env.BASE_URL.replace(/\/$/, ''); // '/yuzuru-hanyu-gallery' or ''
+
+// Asset URL helper: assets/images/foo.jpg → /yuzuru-hanyu-gallery/images/foo.jpg
 function pub(path) {
   if (!path) return path;
-  return path.replace(/^assets\//, '/');
+  const stripped = path.replace(/^(?:assets\/|\/)/, '');
+  return `${base}/${stripped}`;
 }
 
 const cover        = pub(fm.cover);
@@ -66,7 +69,7 @@ const processedSections = rawSections
   <div class="detail-wrap">
 
     <!-- ① Back link -->
-    <a href="/" class="back-link">← Gallery</a>
+    <a href={`${base}/`} class="back-link">← Gallery</a>
 
     <!-- ① Title Block -->
     <div class="entry-title-block">
@@ -118,9 +121,9 @@ const processedSections = rawSections
     <!-- ④ Navigation Widget -->
     <nav class="nav-widget" aria-label="Entry navigation">
       {prevFm ? (
-        <a href={`/${prevFm.slug}/`} class="nav-prev">
+        <a href={`${base}/${prevFm.slug}/`} class="nav-prev">
           <img
-            src={prevFm.cover?.replace(/^assets\//, '/')}
+            src={pub(prevFm.cover)}
             alt={prevFm.title}
             class="nav-thumb"
           />
@@ -131,16 +134,16 @@ const processedSections = rawSections
         </a>
       ) : <span />}
 
-      <a href="/" class="nav-back">↑ All entries</a>
+      <a href={`${base}/`} class="nav-back">↑ All entries</a>
 
       {nextFm ? (
-        <a href={`/${nextFm.slug}/`} class="nav-next">
+        <a href={`${base}/${nextFm.slug}/`} class="nav-next">
           <div>
             <div class="nav-label">Next →</div>
             <div class="nav-entry-title">{nextFm.title}</div>
           </div>
           <img
-            src={nextFm.cover?.replace(/^assets\//, '/')}
+            src={pub(nextFm.cover)}
             alt={nextFm.title}
             class="nav-thumb"
           />

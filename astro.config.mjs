@@ -3,6 +3,8 @@ import react from '@astrojs/react';
 
 export default defineConfig({
   integrations: [react()],
-  publicDir: 'assets',
+  publicDir: 'public',
   outDir: 'dist',
+  site: 'https://vanillaSky00.github.io',
+  base: '/yuzuru-hanyu-gallery',
 });

@@ -13,11 +13,12 @@ function setGlobalMuted(v) {
 }
 
 export default function GalleryCard({
-  title, year, slug, cover, coverPosition,
+  title, year, slug, href, cover, coverPosition,
   intro, tags = [], size = 'medium',
   previewVideo, previewPoster,
   fill = false,
 }) {
+  const entryHref = href || `/${slug}/`;
   const [open,    setOpen]    = useState(false);
   const [muted,   setMuted]   = useState(getSessionMuted);
   const [side,    setSide]    = useState('right'); // popover side
@@ -90,7 +91,7 @@ export default function GalleryCard({
   // ── Navigate ─────────────────────────────────────────────────
   const navigate = (e) => {
     e?.preventDefault?.();
-    window.location.href = `/${slug}/`;
+    window.location.href = entryHref;
   };
 
   // ── Aspect ratio ─────────────────────────────────────────────
@@ -167,7 +168,7 @@ const ratio = ratioMap[size] || '4/5';
             </div>
             <p className="pop-intro">{intro}</p>
             <a
-              href={`/${slug}/`}
+              href={entryHref}
               className="pop-cta"
               onClick={e => { e.stopPropagation(); navigate(); }}
             >
