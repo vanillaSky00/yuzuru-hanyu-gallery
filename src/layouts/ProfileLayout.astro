@@ -3,6 +3,7 @@ interface Props {
   title: string;
 }
 const { title } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -10,14 +11,14 @@ const { title } = Astro.props;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Generic Favicon -->
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    
+    <link rel="icon" href={`${base}/favicon/favicon.ico`} sizes="32x32" />
+    <link rel="icon" href={`${base}/favicon/favicon.svg`} type="image/svg+xml" />
+
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href={`${base}/favicon/apple-touch-icon.png`} />
 
     <!-- Manifest -->
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="manifest" href={`${base}/favicon/site.webmanifest`} />
     
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
